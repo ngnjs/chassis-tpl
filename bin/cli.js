@@ -182,6 +182,11 @@ prompt([{
     console.log(chalk.gray('  Cleanup git files.'))
     del.sync(path.join(answers.root, '.git'))
 
+    console.log(chalk.gray('  Setting up development environment...'))
+    execSync('npm i', {
+      cwd: answers.root
+    })
+
     console.log('\n', chalk.bgBlack.white.bold(' Project Directory:') + ' ' + chalk.bgBlack.green.bold(answers.root))
     console.log(chalk.bgBlack.white.bold('  Navigate to the'), chalk.bgBlack.green.bold('project directory'), chalk.bgBlack.white.bold('and run'), chalk.bgBlack.magenta.bold('npm start'), chalk.bgBlack.white.bold('to begin working.'))
     console.log('\n', chalk.bgBlack.white(' If you want livereload alerts, execute'), chalk.bgBlack.magenta.bold('npm start --notify'), chalk.bgBlack.white('instead.'), '\n')
