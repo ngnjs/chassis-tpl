@@ -177,7 +177,7 @@ prompt([{
 
     console.log(chalk.gray('  Customizing SASS starter file...'))
     content = fs.readFileSync(path.join(answers.root, 'sass', 'main.scss')).toString()
-    content = content.replace('.template {', '.' + pkg.name + ' {')
+    content = content.replace('.template {', '.' + answers.scope + ' {')
     fs.writeFileSync(path.join(answers.root, 'sass', 'main.scss'), content)
 
     console.log(chalk.gray('  Cleanup git files.'))
