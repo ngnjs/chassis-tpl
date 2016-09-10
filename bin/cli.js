@@ -6,6 +6,7 @@ const path = require('path')
 const del = require('rimraf')
 const exec = require('child_process').exec
 const execSync = require('child_process').execSync
+const spawn = require('child_process').spawn
 const inquirer = require('inquirer')
 const chalk = require('chalk')
 const prompt = inquirer.createPromptModule()
@@ -177,18 +178,23 @@ prompt([{
     console.log(chalk.gray('  Customizing SASS starter file.'))
     content = fs.readFileSync(path.join(answers.root, 'sass', 'main.scss')).toString()
     content = content.replace('.template {', '.' + pkg.name + ' {')
-    fs.writeFileSync(path.join(answers.root, 'sass', 'main.scss'))
+    fs.writeFileSync(path.join(answers.root, 'sass', 'main.scss'), content)
 
     console.log(chalk.gray('  Cleanup git files.'))
     del.sync(path.join(answers.root, '.git'))
 
-    console.log(chalk.gray('  Setting up development environment...'))
-    execSync('npm i', {
+    console.log(chalk.gray('  Setting up development environment (this may take a minute)...'))
+    let child = spawn('npm i', {
       cwd: answers.root
     })
 
-    console.log('\n', chalk.bgBlack.white.bold(' Project Directory:') + ' ' + chalk.bgBlack.green.bold(answers.root))
-    console.log(chalk.bgBlack.white.bold('  Navigate to the'), chalk.bgBlack.green.bold('project directory'), chalk.bgBlack.white.bold('and run'), chalk.bgBlack.magenta.bold('npm start'), chalk.bgBlack.white.bold('to begin working.'))
-    console.log('\n', chalk.bgBlack.white(' If you want livereload alerts, execute'), chalk.bgBlack.magenta.bold('npm start --notify'), chalk.bgBlack.white('instead.'), '\n')
+    child.stdout.on('data', console.log)
+    child.stderr.on('data', console.error)
+
+    child.on('close', () => {
+      console.log('\n', chalk.bgBlack.white.bold(' Project Directory:') + ' ' + chalk.bgBlack.green.bold(answers.root))
+      console.log(chalk.bgBlack.white.bold('  Navigate to the'), chalk.bgBlack.green.bold('project directory'), chalk.bgBlack.white.bold('and run'), chalk.bgBlack.magenta.bold('npm start'), chalk.bgBlack.white.bold('to begin working.'))
+      console.log('\n', chalk.bgBlack.white(' If you want livereload alerts, execute'), chalk.bgBlack.magenta.bold('npm start --notify'), chalk.bgBlack.white('instead.'), '\n')
+    })
   })
 })

@@ -1,6 +1,6 @@
 {
   "name": "chassistpl",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A CLI wizard for generating a Chassis boilerplate app. ",
   "main": "index.js",
   "scripts": {

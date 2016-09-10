@@ -4,4 +4,4 @@ _*
 !.npmignore
 node_modules
 test
-
+*.log
