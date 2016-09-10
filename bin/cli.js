@@ -184,12 +184,17 @@ prompt([{
     del.sync(path.join(answers.root, '.git'))
 
     console.log(chalk.gray('  Setting up development environment (this may take a minute)...'))
-    let child = spawn('npm i', {
+    let child = spawn('npm', ['i'], {
       cwd: answers.root
     })
 
-    child.stdout.on('data', console.log)
-    child.stderr.on('data', console.error)
+    child.stdout.on('data', (data) => {
+      console.log(data.toString())
+    })
+
+    child.stderr.on('data', (data) => {
+      console.error(data.toString())
+    })
 
     child.on('close', () => {
       console.log('\n', chalk.bgBlack.white.bold(' Project Directory:') + ' ' + chalk.bgBlack.green.bold(answers.root))
