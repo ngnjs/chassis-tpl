@@ -62,7 +62,7 @@ prompt([{
       return false
     }
     try {
-      fs.accessSync(path.dirname(answers.root), fs.R_OK)
+      fs.accessSync(answers.root, fs.R_OK)
       return false
     } catch (e) {}
     return true
@@ -150,7 +150,7 @@ prompt([{
 
     fs.writeFileSync(path.join(answers.root, 'package.json'), JSON.stringify(pkg, null, 2))
 
-    console.log(chalk.gray('  Customizing HTML template'))
+    console.log(chalk.gray('  Customizing HTML template...'))
     let content = fs.readFileSync(path.join(answers.root, 'src', 'index.html')).toString()
     content = content.replace('<h1>NGN Chassis Showroom</h1>', '<h1>' + answers.name + '</h1>')
     content = content.replace(/<title.*\/title>/i, '<title>' + answers.name + '</title>')
@@ -167,7 +167,7 @@ prompt([{
       js = js + '\n\t\t<script src="https://cdn.jsdelivr.net/webcomponentsjs/latest/webcomponents.min.js"></script>'
 
       answers.wc.forEach(wc => {
-        js += '\n\t\t<script src="https://cdn.author.io/chassis/components/latest/' + wc + '.min.js"></script>'
+        js = js + '\n\t\t<script src="https://cdn.author.io/chassis/components/latest/' + wc + '.min.js"></script>'
       })
     }
 
@@ -175,7 +175,7 @@ prompt([{
 
     fs.writeFileSync(path.join(answers.root, 'src', 'index.html'), content)
 
-    console.log(chalk.gray('  Customizing SASS starter file.'))
+    console.log(chalk.gray('  Customizing SASS starter file...'))
     content = fs.readFileSync(path.join(answers.root, 'sass', 'main.scss')).toString()
     content = content.replace('.template {', '.' + pkg.name + ' {')
     fs.writeFileSync(path.join(answers.root, 'sass', 'main.scss'), content)
